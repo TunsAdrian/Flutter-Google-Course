@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -8,9 +10,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Currency Converter',
+      title: 'Number Shape',
       theme: ThemeData(primarySwatch: Colors.blueGrey),
-      home: const HomePage(title: 'Currency Converter'),
+      home: const HomePage(title: 'Number Shape'),
     );
   }
 }
@@ -24,10 +26,40 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final TextEditingController controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  double valueEur;
-  double valueRon;
+
+  String _numberFindShape = '';
+  String _numberShapeResult = '';
+
+  String _findNumberShape(int number) {
+    final int triangle = pow(number, 1 / 3).round().toInt();
+    final int square = sqrt(number).toInt();
+
+    if (triangle * triangle * triangle == number && square * square == number) {
+      return 'Number $number is both SQUARE and TRIANGULAR';
+    } else if (triangle * triangle * triangle == number) {
+      return 'Number $number is TRIANGULAR';
+    } else if (square * square == number) {
+      return 'Number $number is SQUARE';
+    }
+
+    return 'Number $number is neither TRIANGULAR or SQUARE';
+  }
+
+  // source: api.flutter.dev
+  Future<void> _showNumberShapeDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must not tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(_numberFindShape),
+          content: Text(_numberShapeResult),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,44 +68,41 @@ class _HomePageState extends State<HomePage> {
         title: Text(widget.title),
         centerTitle: true,
       ),
-      body: Center(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blueGrey,
+        onPressed: () {
+          setState(() {
+            if (_formKey.currentState.validate()) {
+              _numberFindShape = _controller.text;
+              _numberShapeResult =
+                  _findNumberShape(int.parse(_numberFindShape));
+              _showNumberShapeDialog();
+            }
+          });
+        },
+        child: const Icon(Icons.done),
+      ),
+      body: Padding(
+          padding: const EdgeInsets.all(15.0),
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Image.network(
-              'https://static.independent.co.uk/s3fs-public/thumbnails/image/2017/06/13/09/euros.jpg?width=990'),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Form(
-                key: _formKey,
-                child: TextFormField(
-                  controller: controller,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter the amount in EUR',
-                  ),
-                  validator: (String value) {
-                    if (double.tryParse(value) == null) {
-                      return 'Please enter a number';
-                    }
-                    return null;
-                  },
-                )),
-          ),
-          RaisedButton(
-              onPressed: () {
-                setState(() {
-                  if (_formKey.currentState.validate()) {
-                    valueEur = double.parse(controller.text);
-                    valueRon = valueEur * 4.87;
-                  }
-                });
-              },
-              child: const Text('CONVERT!')),
-          Text(valueRon == null ? '' : '$valueRon RON',
-              style: const TextStyle(fontSize: 28, color: Colors.grey)),
-        ],
-      )),
+            children: <Widget>[
+              const Text(
+                  'Please input a number to see if it\'s square or triangular:',
+                  style: TextStyle(fontSize: 20)),
+              Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    controller: _controller,
+                    keyboardType: TextInputType.number,
+                    validator: (String value) {
+                      if (int.tryParse(value) == null || int.parse(value) < 0) {
+                        return 'Please enter a whole, positive number';
+                      }
+                      return null;
+                    },
+                  )),
+            ],
+          )),
     );
   }
 }
