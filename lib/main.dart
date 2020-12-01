@@ -70,8 +70,7 @@ class _HomePageState extends State<HomePage> {
                 });
               },
               child: const Text('CONVERT!')),
-          Text(valueRon == null ? '' : '$valueRon RON',
-              style: const TextStyle(fontSize: 28, color: Colors.grey)),
+          Text(valueRon == null ? '' : '$valueRon RON', style: const TextStyle(fontSize: 28, color: Colors.grey)),
         ],
       )),
     );
