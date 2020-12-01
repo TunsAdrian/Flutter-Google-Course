@@ -74,8 +74,7 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             if (_formKey.currentState.validate()) {
               _numberFindShape = _controller.text;
-              _numberShapeResult =
-                  _findNumberShape(int.parse(_numberFindShape));
+              _numberShapeResult = _findNumberShape(int.parse(_numberFindShape));
               _showNumberShapeDialog();
             }
           });
@@ -86,9 +85,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: <Widget>[
-              const Text(
-                  'Please input a number to see if it\'s square or triangular:',
-                  style: TextStyle(fontSize: 20)),
+              const Text('Please input a number to see if it\'s square or triangular:', style: TextStyle(fontSize: 20)),
               Form(
                   key: _formKey,
                   child: TextFormField(
