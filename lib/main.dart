@@ -82,24 +82,16 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: <Widget>[
-              const Text(
-                  'I\'m thinking of a number between 1 and 100.\nIt\'s your turn to guess my number!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24)),
-              Text(
-                  _userNumber == ''
-                      ? ''
-                      : '\nYou tried $_userNumber\n$_guessState\n',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 32, color: Colors.grey)),
+              const Text('I\'m thinking of a number between 1 and 100.\nIt\'s your turn to guess my number!',
+                  textAlign: TextAlign.center, style: TextStyle(fontSize: 24)),
+              Text(_userNumber == '' ? '' : '\nYou tried $_userNumber\n$_guessState\n',
+                  textAlign: TextAlign.center, style: const TextStyle(fontSize: 32, color: Colors.grey)),
               Card(
                 elevation: 5.0,
                 child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(children: <Widget>[
-                      const Text('Try a number!',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 24)),
+                      const Text('Try a number!', textAlign: TextAlign.center, style: TextStyle(fontSize: 24)),
                       Form(
                           key: _formKey,
                           child: TextFormField(
@@ -108,9 +100,7 @@ class _HomePageState extends State<HomePage> {
                             controller: _controller,
                             keyboardType: TextInputType.number,
                             validator: (String value) {
-                              if (int.tryParse(value) == null ||
-                                  int.parse(value) < 1 ||
-                                  int.parse(value) > 100) {
+                              if (int.tryParse(value) == null || int.parse(value) < 1 || int.parse(value) > 100) {
                                 return 'Please enter a whole number, between 1 and 100';
                               }
                               return null;
@@ -127,12 +117,10 @@ class _HomePageState extends State<HomePage> {
                                 _numberToGuess = _generateRandom();
                               } else if (_formKey.currentState.validate()) {
                                 _userNumber = _controller.text;
-                                final int _actualNumberValue =
-                                    int.parse(_userNumber);
+                                final int _actualNumberValue = int.parse(_userNumber);
                                 if (_actualNumberValue > _numberToGuess) {
                                   _guessState = 'Try lower';
-                                } else if (_actualNumberValue <
-                                    _numberToGuess) {
+                                } else if (_actualNumberValue < _numberToGuess) {
                                   _guessState = 'Try higher';
                                 } else {
                                   _isGuessed = true;
