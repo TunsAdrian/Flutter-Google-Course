@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,9 +8,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Number Shape',
+      title: 'Tic-Tac-Toe',
       theme: ThemeData(primarySwatch: Colors.blueGrey),
-      home: const HomePage(title: 'Number Shape'),
+      home: const HomePage(title: 'Tic-Tac-Toe'),
     );
   }
 }
@@ -25,81 +23,135 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+enum _TileState { uninitialised, firstPlayerTap, secondPlayerTap }
+
 class _HomePageState extends State<HomePage> {
-  final TextEditingController _controller = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final List<_TileState> _board = List<_TileState>.generate(9, (int index) {
+    return _TileState.uninitialised;
+  });
+  bool _isFirstTurn = true;
+  bool _isGameEnd = false;
 
-  String _numberFindShape = '';
-  String _numberShapeResult = '';
-
-  String _findNumberShape(int number) {
-    final int triangle = pow(number, 1 / 3).round().toInt();
-    final int square = sqrt(number).toInt();
-
-    if (triangle * triangle * triangle == number && square * square == number) {
-      return 'Number $number is both SQUARE and TRIANGULAR';
-    } else if (triangle * triangle * triangle == number) {
-      return 'Number $number is TRIANGULAR';
-    } else if (square * square == number) {
-      return 'Number $number is SQUARE';
+  void _checkGameEnd(bool isFirst) {
+    // Horizontal win check
+    if ((_board[0] == _board[1]) && (_board[1] == _board[2]) && _board[1] != _TileState.uninitialised) {
+      _highlightWin(0, 1, 2);
+    }
+    if ((_board[3] == _board[4]) && (_board[4] == _board[5]) && _board[4] != _TileState.uninitialised) {
+      _highlightWin(3, 4, 5);
+    }
+    if ((_board[6] == _board[7]) && (_board[7] == _board[8]) && _board[7] != _TileState.uninitialised) {
+      _highlightWin(6, 7, 8);
     }
 
-    return 'Number $number is neither TRIANGULAR or SQUARE';
+    // Vertical win check
+    if ((_board[0] == _board[3]) && (_board[3] == _board[6]) && _board[3] != _TileState.uninitialised) {
+      _highlightWin(0, 3, 6);
+    }
+    if ((_board[1] == _board[4]) && (_board[4] == _board[7]) && _board[4] != _TileState.uninitialised) {
+      _highlightWin(1, 4, 7);
+    }
+    if ((_board[2] == _board[5]) && (_board[5] == _board[8]) && _board[5] != _TileState.uninitialised) {
+      _highlightWin(2, 5, 8);
+    }
+
+    // Diagonal win check
+    if ((_board[0] == _board[4]) && (_board[4] == _board[8]) && _board[4] != _TileState.uninitialised) {
+      _highlightWin(0, 4, 8);
+    }
+    if ((_board[2] == _board[4]) && (_board[4] == _board[6]) && _board[4] != _TileState.uninitialised) {
+      _highlightWin(2, 4, 6);
+    }
+
+    // Check for draw
+    if (!_board.contains(_TileState.uninitialised)) {
+      setState(() {
+        _isGameEnd = true;
+      });
+    }
   }
 
-  // source: api.flutter.dev
-  Future<void> _showNumberShapeDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must not tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(_numberFindShape),
-          content: Text(_numberShapeResult),
-        );
-      },
-    );
+  void _highlightWin(int indexOne, int indexTwo, int indexThree) {
+    setState(() {
+      // Reset the game board
+      _board.fillRange(0, _board.length, _TileState.uninitialised);
+      _isGameEnd = true;
+
+      if (_isFirstTurn) {
+        _board[indexOne] = _TileState.firstPlayerTap;
+        _board[indexTwo] = _TileState.firstPlayerTap;
+        _board[indexThree] = _TileState.firstPlayerTap;
+      } else {
+        _board[indexOne] = _TileState.secondPlayerTap;
+        _board[indexTwo] = _TileState.secondPlayerTap;
+        _board[indexThree] = _TileState.secondPlayerTap;
+      }
+    });
+  }
+
+  void _onPlayerTap(int index) {
+    setState(() {
+      _board[index] = _isFirstTurn ? _TileState.firstPlayerTap : _TileState.secondPlayerTap;
+      _checkGameEnd(_isFirstTurn);
+      _isFirstTurn = !_isFirstTurn;
+    });
+  }
+
+  Color _getTileColor(int index) {
+    if (_board[index] == _TileState.firstPlayerTap) {
+      return Colors.green;
+    } else if (_board[index] == _TileState.secondPlayerTap) {
+      return Colors.red;
+    }
+    return Theme.of(context).scaffoldBackgroundColor; // color the uninitialised tiles with background color
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        centerTitle: true,
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blueGrey,
-        onPressed: () {
-          setState(() {
-            if (_formKey.currentState.validate()) {
-              _numberFindShape = _controller.text;
-              _numberShapeResult = _findNumberShape(int.parse(_numberFindShape));
-              _showNumberShapeDialog();
-            }
-          });
-        },
-        child: const Icon(Icons.done),
-      ),
-      body: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: <Widget>[
-              const Text('Please input a number to see if it\'s square or triangular:', style: TextStyle(fontSize: 20)),
-              Form(
-                  key: _formKey,
-                  child: TextFormField(
-                    controller: _controller,
-                    keyboardType: TextInputType.number,
-                    validator: (String value) {
-                      if (int.tryParse(value) == null || int.parse(value) < 0) {
-                        return 'Please enter a whole, positive number';
-                      }
-                      return null;
-                    },
-                  )),
-            ],
-          )),
-    );
+        appBar: AppBar(
+          title: Text(widget.title),
+          centerTitle: true,
+        ),
+        body: Column(
+          children: <Widget>[
+            // Both Column and GridView widgets expand the size on main axis, so shrinkWrap property should be used,
+            // as the GridView is of a fairly small size
+            Container(
+              color: Colors.black,
+              child: GridView.builder(
+                shrinkWrap: true,
+                itemCount: 9,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 1.0,
+                  mainAxisSpacing: 1.0,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  return GestureDetector(
+                      child:
+                          AnimatedContainer(duration: const Duration(milliseconds: 500), color: _getTileColor(index)),
+                      onTap: () {
+                        _onPlayerTap(index);
+                      });
+                },
+              ),
+            ),
+            Visibility(
+              visible: _isGameEnd,
+              child: RaisedButton(
+                  onPressed: () {
+                    setState(() {
+                      // Reset the game board
+                      _board.fillRange(0, _board.length, _TileState.uninitialised);
+                      _isFirstTurn = true;
+                      _isGameEnd = false;
+                    });
+                  },
+                  padding: const EdgeInsets.all(5.0),
+                  child: const Text('Play again!')),
+            )
+          ],
+        ));
   }
 }
