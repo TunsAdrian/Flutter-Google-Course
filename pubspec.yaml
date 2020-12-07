@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   pedantic: ^1.9.0
+  audioplayers: ^0.17.0
 
   cupertino_icons: ^1.0.0
 
@@ -22,5 +23,14 @@ dev_dependencies:
 
 flutter:
 
-  uses-material-design: true
+  assets:
+    - assets/basicPhrases/salut.mp3
+    - assets/basicPhrases/salut_ja.mp3
+    - assets/basicPhrases/ma_numesc.mp3
+    - assets/basicPhrases/ma_numesc_ja.mp3
+    - assets/basicPhrases/cum_esti.mp3
+    - assets/basicPhrases/cum_esti_ja.mp3
+    - assets/basicPhrases/sunt_bine.mp3
+    - assets/basicPhrases/sunt_bine_ja.mp3
 
+  uses-material-design: true
