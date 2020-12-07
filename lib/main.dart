@@ -91,9 +91,11 @@ class _HomePageState extends State<HomePage> {
 
   void _onPlayerTap(int index) {
     setState(() {
-      _board[index] = _isFirstTurn ? _TileState.firstPlayerTap : _TileState.secondPlayerTap;
-      _checkGameEnd(_isFirstTurn);
-      _isFirstTurn = !_isFirstTurn;
+      if (_board[index] == _TileState.uninitialised) {
+        _board[index] = _isFirstTurn ? _TileState.firstPlayerTap : _TileState.secondPlayerTap;
+        _checkGameEnd(_isFirstTurn);
+        _isFirstTurn = !_isFirstTurn;
+      }
     });
   }
 
