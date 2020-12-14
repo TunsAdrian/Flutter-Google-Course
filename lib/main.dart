@@ -1,117 +1,182 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'movie.dart';
+import 'movie_detailed_page.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Atelierul Google pentru Programatori',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.red,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: const MyHomePage(title: 'Atelierul Google pentru Programatori'),
+      title: 'YTS Movies',
+      theme: ThemeData(primarySwatch: Colors.blueGrey),
+      home: const HomePage(title: 'YTS Movies'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
+class HomePage extends StatefulWidget {
+  const HomePage({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _HomePageState extends State<HomePage> {
+  bool sortDescending = true;
+  int currentPageNumber = 1;
+  num movieCount = double.infinity;
+  String dropdownValue = 'Latest';
 
-  void _incrementCounter() {
+  List<Movie> movieList = <Movie>[];
+  Map<String, String> sortByOptions = <String, String>{
+    'Latest': 'date_added',
+    'Rating': 'rating',
+    'Year': 'year',
+    'Alphabetical': 'title'
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    getMovieList();
+  }
+
+  Future<void> getMovieList() async {
+    final String addressWithQuery =
+        'https://yts.mx/api/v2/list_movies.json?page=$currentPageNumber&order_by=${sortDescending ? 'desc' : 'asc'}&sort_by=${sortByOptions[dropdownValue]}';
+    final Response response = await get(addressWithQuery);
+
+    final Map<String, dynamic> responseData = jsonDecode(response.body);
+    final Map<String, dynamic> data = responseData['data'];
+    final List<dynamic> movies = data['movies'];
+    movieCount = data['movie_count'];
+    movieList.clear();
+
+    for (int i = 0; i < movies.length; i++) {
+      final Map<String, dynamic> item = movies[i];
+      final Movie movie = Movie(
+        title: item['title'],
+        year: item['year'],
+        rating: item['rating'],
+        runtime: item['runtime'],
+        cover: item['medium_cover_image'],
+      );
+
+      movieList.add(movie);
+    }
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      // movieList is changed
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        centerTitle: true,
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                DropdownButton<String>(
+                  value: dropdownValue,
+                  onChanged: (String newValue) {
+                    setState(() {
+                      dropdownValue = newValue;
+                    });
+                  },
+                  items: sortByOptions.keys.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                FlatButton.icon(
+                  label: Text(sortDescending ? 'Descending' : 'Ascending'),
+                  icon: Icon(sortDescending ? Icons.arrow_downward_rounded : Icons.arrow_upward_rounded),
+                  onPressed: () {
+                    setState(() {
+                      sortDescending = !sortDescending;
+                    });
+                  },
+                ),
+                FlatButton.icon(
+                  label: const Text('Search'),
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    setState(() {
+                      getMovieList();
+                    });
+                  },
+                ),
+              ],
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(8.0),
+              itemCount: movieList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  leading: const Icon(Icons.local_movies_rounded),
+                  title: Text('${movieList[index].title}'),
+                  subtitle: Text(
+                      'Rating: ${movieList[index].rating}, Year: ${movieList[index].year}, Runtime: ${movieList[index].runtime}'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<MoviePage>(builder: (BuildContext context) => MoviePage(movieList[index])),
+                    );
+                  },
+                );
+              },
             ),
-          ],
-        ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Visibility(
+                visible: currentPageNumber > 1,
+                child: IconButton(
+                  icon: const Icon(Icons.chevron_left),
+                  onPressed: () {
+                    setState(() {
+                      currentPageNumber--;
+                      getMovieList();
+                    });
+                  },
+                ),
+              ),
+              Text('Page: $currentPageNumber', style: const TextStyle(fontSize: 14.0)),
+              Visibility(
+                visible: currentPageNumber < movieCount / 20,
+                child: IconButton(
+                  icon: const Icon(Icons.chevron_right),
+                  onPressed: () {
+                    setState(() {
+                      currentPageNumber++;
+                      getMovieList();
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
