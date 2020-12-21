@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import 'movie.dart';
+import 'models/movie.dart';
 
 class MoviePage extends StatelessWidget {
   const MoviePage(this.movie);
@@ -16,7 +16,7 @@ class MoviePage extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Image.network(movie.cover, fit: BoxFit.cover),
+          Image.network(movie.mediumCover, fit: BoxFit.cover),
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
             child: Container(color: Colors.black.withOpacity(0.5)),
@@ -30,7 +30,7 @@ class MoviePage extends StatelessWidget {
                   child: Container(width: 400.0, height: 400.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
-                    image: DecorationImage(image: NetworkImage(movie.cover), fit: BoxFit.cover),
+                    image: DecorationImage(image: NetworkImage(movie.mediumCover), fit: BoxFit.cover),
                   ),
                 ),
                 Container(
