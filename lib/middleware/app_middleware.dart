@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:google_hw/actions/get_movies.dart';
 import 'package:google_hw/data/yts_api.dart';
 import 'package:google_hw/models/app_state.dart';

@@ -11,11 +11,12 @@ import 'package:google_hw/containers/is_loading_container.dart';
 import 'package:google_hw/containers/movies_container.dart';
 import 'package:google_hw/containers/quality_container.dart';
 import 'package:google_hw/containers/sort_by_container.dart';
-import 'package:google_hw/models/movie.dart';
 import 'package:google_hw/presentation/movie_detailed_page.dart';
 import 'package:google_hw/containers/order_by_container.dart';
 import 'package:google_hw/models/app_state.dart';
+import 'package:google_hw/models/movie.dart';
 import 'package:redux/redux.dart';
+import 'package:redux/src/store.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
