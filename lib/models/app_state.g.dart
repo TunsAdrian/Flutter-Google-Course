@@ -14,11 +14,13 @@ class _$AppState extends AppState {
   @override
   final String quality;
   @override
+  final String sortBy;
+  @override
   final String orderBy;
   @override
-  final BuiltList<String> genres;
-  @override
   final bool isLoading;
+  @override
+  final BuiltList<String> genres;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
@@ -27,9 +29,10 @@ class _$AppState extends AppState {
       {this.movies,
       this.page,
       this.quality,
+      this.sortBy,
       this.orderBy,
-      this.genres,
-      this.isLoading})
+      this.isLoading,
+      this.genres})
       : super._() {
     if (movies == null) {
       throw new BuiltValueNullFieldError('AppState', 'movies');
@@ -40,11 +43,11 @@ class _$AppState extends AppState {
     if (orderBy == null) {
       throw new BuiltValueNullFieldError('AppState', 'orderBy');
     }
-    if (genres == null) {
-      throw new BuiltValueNullFieldError('AppState', 'genres');
-    }
     if (isLoading == null) {
       throw new BuiltValueNullFieldError('AppState', 'isLoading');
+    }
+    if (genres == null) {
+      throw new BuiltValueNullFieldError('AppState', 'genres');
     }
   }
 
@@ -62,9 +65,10 @@ class _$AppState extends AppState {
         movies == other.movies &&
         page == other.page &&
         quality == other.quality &&
+        sortBy == other.sortBy &&
         orderBy == other.orderBy &&
-        genres == other.genres &&
-        isLoading == other.isLoading;
+        isLoading == other.isLoading &&
+        genres == other.genres;
   }
 
   @override
@@ -72,11 +76,13 @@ class _$AppState extends AppState {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, movies.hashCode), page.hashCode),
-                    quality.hashCode),
+                $jc(
+                    $jc($jc($jc(0, movies.hashCode), page.hashCode),
+                        quality.hashCode),
+                    sortBy.hashCode),
                 orderBy.hashCode),
-            genres.hashCode),
-        isLoading.hashCode));
+            isLoading.hashCode),
+        genres.hashCode));
   }
 
   @override
@@ -85,9 +91,10 @@ class _$AppState extends AppState {
           ..add('movies', movies)
           ..add('page', page)
           ..add('quality', quality)
+          ..add('sortBy', sortBy)
           ..add('orderBy', orderBy)
-          ..add('genres', genres)
-          ..add('isLoading', isLoading))
+          ..add('isLoading', isLoading)
+          ..add('genres', genres))
         .toString();
   }
 }
@@ -107,18 +114,22 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   String get quality => _$this._quality;
   set quality(String quality) => _$this._quality = quality;
 
+  String _sortBy;
+  String get sortBy => _$this._sortBy;
+  set sortBy(String sortBy) => _$this._sortBy = sortBy;
+
   String _orderBy;
   String get orderBy => _$this._orderBy;
   set orderBy(String orderBy) => _$this._orderBy = orderBy;
+
+  bool _isLoading;
+  bool get isLoading => _$this._isLoading;
+  set isLoading(bool isLoading) => _$this._isLoading = isLoading;
 
   ListBuilder<String> _genres;
   ListBuilder<String> get genres =>
       _$this._genres ??= new ListBuilder<String>();
   set genres(ListBuilder<String> genres) => _$this._genres = genres;
-
-  bool _isLoading;
-  bool get isLoading => _$this._isLoading;
-  set isLoading(bool isLoading) => _$this._isLoading = isLoading;
 
   AppStateBuilder();
 
@@ -127,9 +138,10 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _movies = _$v.movies?.toBuilder();
       _page = _$v.page;
       _quality = _$v.quality;
+      _sortBy = _$v.sortBy;
       _orderBy = _$v.orderBy;
-      _genres = _$v.genres?.toBuilder();
       _isLoading = _$v.isLoading;
+      _genres = _$v.genres?.toBuilder();
       _$v = null;
     }
     return this;
@@ -157,9 +169,10 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               movies: movies.build(),
               page: page,
               quality: quality,
+              sortBy: sortBy,
               orderBy: orderBy,
-              genres: genres.build(),
-              isLoading: isLoading);
+              isLoading: isLoading,
+              genres: genres.build());
     } catch (_) {
       String _$failedField;
       try {

@@ -11,15 +11,16 @@ class YtsApi {
 
   final Client _client;
 
-  Future<List<Movie>> getMovies(int page, String quality, List<String> genres, String orderBy) async {
+  Future<List<Movie>> getMovies(int page, String quality, List<String> genres, String orderBy, String sortBy) async {
     final Uri url = Uri(
       scheme: 'https',
       host: 'yts.mx',
       pathSegments: <String>['api', 'v2', 'list_movies.json'],
       queryParameters: <String, String>{
-        'limit': '3',
+        'limit': '9',
         'page': '$page',
         'order_by': orderBy,
+        if (sortBy != null) 'sort_by': sortBy,
         if (quality != null) 'quality': quality,
         if (genres.isNotEmpty) 'genre': genres.join(','),
       },

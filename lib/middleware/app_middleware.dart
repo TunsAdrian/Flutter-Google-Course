@@ -32,6 +32,7 @@ class AppMiddleware {
         store.state.quality,
         store.state.genres.asList(),
         store.state.orderBy,
+        store.state.sortBy,
       );
       final GetMovies successful = GetMovies.successful(movies);
       store.dispatch(successful);

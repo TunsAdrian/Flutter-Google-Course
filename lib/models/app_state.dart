@@ -25,9 +25,12 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   @nullable
   String get quality;
 
+  @nullable
+  String get sortBy;
+
   String get orderBy;
 
-  BuiltList<String> get genres;
-
   bool get isLoading;
+
+  BuiltList<String> get genres;
 }

@@ -5,13 +5,15 @@ import 'package:google_hw/actions/get_movies.dart';
 import 'package:google_hw/actions/set_genres.dart';
 import 'package:google_hw/actions/set_order_by.dart';
 import 'package:google_hw/actions/set_quality.dart';
+import 'package:google_hw/actions/set_sort_by.dart';
 import 'package:google_hw/containers/genres_container.dart';
 import 'package:google_hw/containers/is_loading_container.dart';
 import 'package:google_hw/containers/movies_container.dart';
 import 'package:google_hw/containers/quality_container.dart';
+import 'package:google_hw/containers/sort_by_container.dart';
 import 'package:google_hw/models/movie.dart';
 import 'package:google_hw/presentation/movie_detailed_page.dart';
-import 'package:google_hw/containers/order_by_containers.dart';
+import 'package:google_hw/containers/order_by_container.dart';
 import 'package:google_hw/models/app_state.dart';
 import 'package:redux/redux.dart';
 
@@ -98,24 +100,49 @@ class HomePage extends StatelessWidget {
                           );
                         },
                       ),
-                      QualityContainer(
-                        builder: (BuildContext context, String quality) {
-                          return DropdownButton<String>(
-                            value: quality,
-                            hint: const Text('All'),
-                            onChanged: (String value) {
-                              StoreProvider.of<AppState>(context)
-                                ..dispatch(SetQuality(value))
-                                ..dispatch(const GetMovies.start(1));
-                            },
-                            items: <String>[null, '720p', '1080p', '2160p', '3D'].map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value ?? 'All'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          QualityContainer(
+                            builder: (BuildContext context, String quality) {
+                              return DropdownButton<String>(
+                                value: quality,
+                                hint: const Text('All'),
+                                onChanged: (String value) {
+                                  StoreProvider.of<AppState>(context)
+                                    ..dispatch(SetQuality(value))
+                                    ..dispatch(const GetMovies.start(1));
+                                },
+                                items: <String>[null, '720p', '1080p', '2160p', '3D'].map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value ?? 'All'),
+                                  );
+                                }).toList(),
                               );
-                            }).toList(),
-                          );
-                        },
+                            },
+                          ),
+                          SortByContainer(
+                            builder: (BuildContext context, String sortBy) {
+                              return DropdownButton<String>(
+                                value: sortBy,
+                                hint: const Text('date added'),
+                                onChanged: (String value) {
+                                  StoreProvider.of<AppState>(context)
+                                    ..dispatch(SetSortBy(value))
+                                    ..dispatch(const GetMovies.start(1));
+                                },
+                                // add mapping like "Rating: rating" instead of using list
+                                items: <String>[null, 'rating', 'year', 'title'].map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value ?? 'date added'),
+                                  );
+                                }).toList(),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                       Expanded(
                         child: GridView.builder(

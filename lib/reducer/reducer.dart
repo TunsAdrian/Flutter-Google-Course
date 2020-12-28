@@ -3,6 +3,7 @@ import 'package:google_hw/actions/get_movies.dart';
 import 'package:google_hw/actions/set_genres.dart';
 import 'package:google_hw/actions/set_order_by.dart';
 import 'package:google_hw/actions/set_quality.dart';
+import 'package:google_hw/actions/set_sort_by.dart';
 import 'package:google_hw/models/app_state.dart';
 
 AppState reducer(AppState state, dynamic action) {
@@ -28,6 +29,10 @@ AppState reducer(AppState state, dynamic action) {
   } else if (action is SetOrderBy) {
     builder
       ..orderBy = action.orderBy
+      ..movies.clear();
+  } else if (action is SetSortBy) {
+    builder
+      ..sortBy = action.sortBy
       ..movies.clear();
   }
 
