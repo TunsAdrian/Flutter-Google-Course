@@ -22,7 +22,7 @@ void main() {
     middleware: appMiddleware.middleware,
   );
 
-  store.dispatch(const GetMovies());
+  store.dispatch(GetMovies.start(initialState.page));
   runApp(MyApp(store: store));
 }
 

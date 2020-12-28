@@ -1,17 +1,15 @@
+library get_movies;
+
 import 'package:google_hw/models/movie.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class GetMovies {
-  const GetMovies();
-}
+part 'get_movies.freezed.dart';
 
-class GetMoviesSuccessful {
-  const GetMoviesSuccessful(this.movies);
+@freezed
+abstract class GetMovies with _$GetMovies {
+  const factory GetMovies.start(int page) = GetMoviesStart;
 
-  final List<Movie> movies;
-}
+  const factory GetMovies.successful(List<Movie> movies) = GetMoviesSuccessful;
 
-class GetMoviesError {
-  const GetMoviesError(this.error);
-
-  final dynamic error;
+  const factory GetMovies.error(dynamic error) = GetMoviesError;
 }

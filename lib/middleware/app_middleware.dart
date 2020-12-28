@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:google_hw/actions/get_movies.dart';
 import 'package:google_hw/data/yts_api.dart';
 import 'package:google_hw/models/app_state.dart';
@@ -20,16 +21,22 @@ class AppMiddleware {
 
   Future<void> _getMoviesMiddleware(Store<AppState> store, dynamic action, NextDispatcher next) async {
     next(action);
-    if (action is! GetMovies) {
+    if (action is! GetMoviesStart) {
       return;
     }
 
     try {
-      final List<Movie> movies = await _ytsApi.getMovies();
-      final GetMoviesSuccessful successful = GetMoviesSuccessful(movies);
+      final GetMoviesStart startAction = action as GetMoviesStart;
+      final List<Movie> movies = await _ytsApi.getMovies(
+        startAction.page,
+        store.state.quality,
+        store.state.genres.asList(),
+        store.state.orderBy,
+      );
+      final GetMovies successful = GetMovies.successful(movies);
       store.dispatch(successful);
     } catch (e) {
-      final GetMoviesError error = GetMoviesError(e);
+      final GetMovies error = GetMovies.error(e);
       store.dispatch(error);
     }
   }
