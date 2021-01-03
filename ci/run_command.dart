@@ -26,6 +26,7 @@ bool fileFilter(String it) =>
     it.endsWith('.dart') && //
     it != '.dart_tool/build/entrypoint/build.dart' &&
     !it.endsWith('.g.dart') &&
+    !it.endsWith('.freezed.dart') &&
     !it.endsWith('.test_coverage.dart') &&
     !it.endsWith('i18n.dart');
 
