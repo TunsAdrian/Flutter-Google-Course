@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import 'package:google_hw/models/movie.dart';
+import 'package:google_hw/models/index.dart';
 
 class MoviePage extends StatelessWidget {
   const MoviePage(this.movie);

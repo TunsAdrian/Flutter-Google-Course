@@ -1,7 +1,4 @@
-import 'package:flutter/widgets.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:google_hw/models/app_state.dart';
-import 'package:redux/src/store.dart';
+part of containers;
 
 class GenresContainer extends StatelessWidget {
   const GenresContainer({Key key, this.builder}) : super(key: key);

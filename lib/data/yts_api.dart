@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:google_hw/models/movie.dart';
+import 'package:google_hw/models/index.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 

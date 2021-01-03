@@ -1,10 +1,10 @@
-import 'package:google_hw/actions/get_movies.dart';
+import 'package:google_hw/actions/index.dart';
 import 'package:google_hw/data/yts_api.dart';
-import 'package:google_hw/models/app_state.dart';
-import 'package:google_hw/models/movie.dart';
+import 'package:google_hw/models/index.dart';
 import 'package:meta/meta.dart';
 import 'package:redux/redux.dart';
 
+/// Class is not used anymore; Replaced by app_epics.dart
 class AppMiddleware {
   const AppMiddleware({@required YtsApi ytsApi})
       : assert(ytsApi != null),
@@ -14,20 +14,16 @@ class AppMiddleware {
 
   List<Middleware<AppState>> get middleware {
     return <Middleware<AppState>>[
-      _getMoviesMiddleware,
+      TypedMiddleware<AppState, GetMoviesStart>(_getMoviesStart),
     ];
   }
 
-  Future<void> _getMoviesMiddleware(Store<AppState> store, dynamic action, NextDispatcher next) async {
+  Future<void> _getMoviesStart(Store<AppState> store, GetMoviesStart action, NextDispatcher next) async {
     next(action);
-    if (action is! GetMoviesStart) {
-      return;
-    }
 
     try {
-      final GetMoviesStart startAction = action as GetMoviesStart;
       final List<Movie> movies = await _ytsApi.getMovies(
-        startAction.page,
+        action.page,
         store.state.quality,
         store.state.genres.asList(),
         store.state.orderBy,
