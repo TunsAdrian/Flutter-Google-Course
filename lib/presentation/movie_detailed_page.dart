@@ -47,7 +47,8 @@ class MoviePage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'The movie "${movie.title}" was released on ${movie.year} and has a runtime of ${movie.runtime} minutes.',
+                    'The movie "${movie.title}" was released on ${movie.year} and has '
+                        'a runtime of ${movie.runtime} minutes.',
                     style: const TextStyle(color: Colors.white, fontSize: 16.0),
                   ),
                 ],
