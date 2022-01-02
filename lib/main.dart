@@ -33,18 +33,18 @@ class _HomePageState extends State<HomePage> {
   String _numberShapeResult = '';
 
   String _findNumberShape(int number) {
-    final int triangle = pow(number, 1 / 3).round().toInt();
+    final int cube = pow(number, 1 / 3).round().toInt();
     final int square = sqrt(number).toInt();
 
-    if (triangle * triangle * triangle == number && square * square == number) {
-      return 'Number $number is both SQUARE and TRIANGULAR';
-    } else if (triangle * triangle * triangle == number) {
-      return 'Number $number is TRIANGULAR';
+    if (cube * cube * cube == number && square * square == number) {
+      return 'Number $number is both SQUARE and CUBE';
+    } else if (cube * cube * cube == number) {
+      return 'Number $number is CUBE';
     } else if (square * square == number) {
       return 'Number $number is SQUARE';
     }
 
-    return 'Number $number is neither TRIANGULAR or SQUARE';
+    return 'Number $number is neither SQUARE nor CUBE';
   }
 
   // source: api.flutter.dev
@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: <Widget>[
-              const Text('Please input a number to see if it\'s square or triangular:', style: TextStyle(fontSize: 20)),
+              const Text('Please input a number to see if it is SQUARE or CUBE:', style: TextStyle(fontSize: 20)),
               Form(
                   key: _formKey,
                   child: TextFormField(
