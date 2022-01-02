@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   }).toList(),
                 ),
-                FlatButton.icon(
+                ElevatedButton.icon(
                   label: Text(sortDescending ? 'Descending' : 'Ascending'),
                   icon: Icon(sortDescending ? Icons.arrow_downward_rounded : Icons.arrow_upward_rounded),
                   onPressed: () {
@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                     });
                   },
                 ),
-                FlatButton.icon(
+                ElevatedButton.icon(
                   label: const Text('Search'),
                   icon: const Icon(Icons.search),
                   onPressed: () {
