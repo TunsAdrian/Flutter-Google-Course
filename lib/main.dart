@@ -106,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                               return null;
                             },
                           )),
-                      RaisedButton(
+                      ElevatedButton(
                           onPressed: () {
                             setState(() {
                               // If button is pressed after the number was guessed, reset the game
