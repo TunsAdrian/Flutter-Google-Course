@@ -141,17 +141,19 @@ class _HomePageState extends State<HomePage> {
             ),
             Visibility(
               visible: _isGameEnd,
-              child: RaisedButton(
-                  onPressed: () {
-                    setState(() {
-                      // Reset the game board
-                      _board.fillRange(0, _board.length, _TileState.uninitialised);
-                      _isFirstTurn = true;
-                      _isGameEnd = false;
-                    });
-                  },
-                  padding: const EdgeInsets.all(5.0),
-                  child: const Text('Play again!')),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        // Reset the game board
+                        _board.fillRange(0, _board.length, _TileState.uninitialised);
+                        _isFirstTurn = true;
+                        _isGameEnd = false;
+                      });
+                    },
+                    child: const Text('Play again!')),
+              ),
             )
           ],
         ));
