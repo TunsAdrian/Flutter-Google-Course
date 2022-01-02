@@ -2,7 +2,9 @@
 
 The purpose of this repository is to publish all the homeworks for Google Flutter Course. A new branch is created for each of the homeworks. So far, the following programs were written:
 
-1. [Laboratories Tasks](https://github.com/TunsAdrian/Flutter-Google-Course/tree/laboratories-tasks) application with 2 tasks, one for fetching and a JSON file from the internet, parsing it and printing it in the terminal, and another task for fetching a list with the flags of the world names and images and showing them in a GridView.
+1. [Laboratories Tasks](https://github.com/TunsAdrian/Flutter-Google-Course/tree/laboratories-tasks) application with 2 tasks:
+   - first task was to fetch a JSON file with movies from https://yts.mx/, parse it and print its content in the terminal
+   - second task was to fetch a list with the flags of the world names and images and to show them in a GridView
 
 2. [Currency Converter](https://github.com/TunsAdrian/Flutter-Google-Course/tree/Currency-Converter) application that converts currency using a hardcoded value, from EUR to RON.
 
