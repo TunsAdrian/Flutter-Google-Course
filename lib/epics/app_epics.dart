@@ -1,6 +1,6 @@
 import 'package:google_hw/actions/index.dart';
-import 'package:google_hw/models/index.dart';
 import 'package:google_hw/data/yts_api.dart';
+import 'package:google_hw/models/index.dart';
 import 'package:meta/meta.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:rxdart/rxdart.dart';

@@ -1,15 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux_epics/redux_epics.dart';
-import 'package:google_hw/epics/app_epics.dart';
 import 'package:google_hw/actions/index.dart';
-import 'package:google_hw/models/index.dart';
 import 'package:google_hw/data/yts_api.dart';
+import 'package:google_hw/epics/app_epics.dart';
+import 'package:google_hw/models/index.dart';
 import 'package:google_hw/presentation/home_page.dart';
 import 'package:google_hw/reducer/reducer.dart';
+import 'package:http/http.dart';
+import 'package:redux/redux.dart';
+import 'package:redux_epics/redux_epics.dart';
 
 void main() {
   final Client client = Client();

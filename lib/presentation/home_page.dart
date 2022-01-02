@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/src/store.dart';
@@ -163,7 +162,7 @@ class HomePage extends StatelessWidget {
                           },
                         ),
                       ),
-                      FlatButton(
+                      ElevatedButton(
                         child: const Text('Load more'),
                         onPressed: () {
                           final Store<AppState> store = StoreProvider.of<AppState>(context);
