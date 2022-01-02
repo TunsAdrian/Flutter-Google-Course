@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/src/store.dart';
 import 'package:google_hw/actions/index.dart';
 import 'package:google_hw/containers/index.dart';
 import 'package:google_hw/models/index.dart';
 import 'package:google_hw/presentation/movie_detailed_page.dart';
+import 'package:redux/src/store.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
